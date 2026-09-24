@@ -79,7 +79,9 @@ add_link_options(
 # target_link_libraries(main.elf stm32h7xx_hal weact_stm32h7b0_blink)
 
 add_subdirectory(STM32CubeH7)
-add_subdirectory(firmware/main)
+add_subdirectory(firmware/interrupt_handler)
+add_subdirectory(firmware/system_init)
+add_subdirectory(test/test_blink)
 
 # add_executable(main.elf STM32CubeH7/Drivers/CMSIS/Device/ST/STM32H7xx/Source/Templates/gcc/startup_stm32h7b0xx.s)
 add_executable(main.elf startup/stm32h7b0_startup.S)
@@ -87,7 +89,9 @@ add_executable(main.elf startup/stm32h7b0_startup.S)
 target_link_libraries(main.elf 
     "-Wl,--gc-sections"
     "-Wl,--whole-archive"
-    firmware-main
+    firmware_system_init
+    firmware_interrupt_handler
+    test_blink
     CMSIS_Core
     STM32H7xx
     STM32H7xx_HAL_Driver
