@@ -7,6 +7,10 @@ build:
 	cmake -GNinja -B $(BUILD_DIR) .
 	cmake --build $(BUILD_DIR)
 
+.PHONY: clean
+clean:
+	rm -r $(BUILD_DIR)
+
 .PHONY: upload-dfu
 upload-dfu:
 	dfu-util -a 0 --dfuse-address 0x08000000 -D $(BUILD_DIR)/main.bin
