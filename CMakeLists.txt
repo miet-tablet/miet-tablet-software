@@ -66,7 +66,7 @@ set(TARGET main)
 
 add_link_options(
     #${ARCH_FLAGS}
-    -mcpu=cortex-m7 -mthumb -mfpu=fpv5-d16 -mfloat-abi=hard -nostdlib
+    -mcpu=cortex-m7 -mthumb -mfpu=fpv5-d16 -mfloat-abi=hard -nostdlib -Wl,--gc-sections
     "-T${LDSCRIPT_PATH}"
     #"-Wl,--gc-sections"
     #"-nostartfiles"
@@ -86,17 +86,7 @@ add_subdirectory(test/test_blink)
 # add_executable(main.elf STM32CubeH7/Drivers/CMSIS/Device/ST/STM32H7xx/Source/Templates/gcc/startup_stm32h7b0xx.s)
 add_executable(main.elf startup/stm32h7b0_startup.S)
 
-target_link_libraries(main.elf 
-    "-Wl,--gc-sections"
-    "-Wl,--whole-archive"
-    firmware_system_init
-    firmware_interrupt_handler
-    test_blink
-    CMSIS_Core
-    STM32H7xx
-    STM32H7xx_HAL_Driver
-    "-Wl,--no-whole-archive"
-)
+target_link_libraries(main.elf ${TOP} "-Wl,--whole-archive" firmware_interrupt_handler "-Wl,--no-whole-archive")
 
 add_custom_command(
     TARGET main.elf

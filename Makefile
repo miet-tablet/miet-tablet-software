@@ -4,12 +4,12 @@ BUILD_DIR ?= build
 
 .PHONY: build
 build:
-	cmake -GNinja -B $(BUILD_DIR) .
+	cmake -GNinja -B $(BUILD_DIR) . -DTOP=$(top)
 	cmake --build $(BUILD_DIR)
 
 .PHONY: clean
 clean:
-	rm -r $(BUILD_DIR)
+	rm -rf $(BUILD_DIR)
 
 .PHONY: upload-dfu
 upload-dfu:
