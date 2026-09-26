@@ -1,6 +1,6 @@
 #
 
-project(firmware-main)
+project(test_gpio_interrupts)
 
 set(SOURCES
     src/main.c

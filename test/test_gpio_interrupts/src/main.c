@@ -1,5 +1,5 @@
 #include "main.h"
-
+#include "stm32h7xx_hal.h"
 static void MPU_Config(void);
 void Error_Handler(void);
 
@@ -206,16 +206,15 @@ int main(void)
 }
 static void EXTI1_IRQHandler_Config(void)
 {
-    GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-    BUTTON_GPIOX_CLK_ENABLE()
+    BUTTON_GPIOX_CLK_ENABLE();
 
-    GPIO_InitStructure.Mode = GPIO_MODE_IT_RISING;
-    GPIO_InitStructure.Pull = GPIO_NOPULL;
-    GPIO_InitStructure.Pin = BUTTON_USER_PIN;
-    HAL_GPIO_Init(BUTTON_GPIOX, &GPIO_InitStructure);
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Pin = BUTTON_USER_PIN;
+    HAL_GPIO_Init(BUTTON_GPIOX, &GPIO_InitStruct);
   
-    /* Enable and set EXTI lines 15 to 10 Interrupt */
     HAL_NVIC_SetPriority(EXTI1_IRQn, 2, 0);
     HAL_NVIC_EnableIRQ(EXTI1_IRQn);
 }
