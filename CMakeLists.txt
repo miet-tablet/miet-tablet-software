@@ -82,6 +82,7 @@ add_subdirectory(STM32CubeH7)
 add_subdirectory(firmware/interrupt_handler)
 add_subdirectory(firmware/system_init)
 add_subdirectory(test/test_blink)
+add_subdirectory(test/test_gpio_interrupts)
 
 # add_executable(main.elf STM32CubeH7/Drivers/CMSIS/Device/ST/STM32H7xx/Source/Templates/gcc/startup_stm32h7b0xx.s)
 add_executable(main.elf startup/stm32h7b0_startup.S)
