@@ -95,3 +95,25 @@ add_custom_command(
     COMMAND ${CMAKE_OBJCOPY} ARGS -O binary main.elf main.bin
     COMMAND ${CMAKE_OBJDUMP} ARGS -S main.elf > main.lst
 )
+
+
+
+
+find_program(CLANG_FORMAT_EXECUTABLE NAMES clang-format clang-format-15 clang-format-14)
+if(CLANG_FORMAT_EXECUTABLE)
+    file(GLOB_RECURSE ALL_SOURCE_FILES
+        firmware/*.c firmware/*.h
+        startup/*.c startup/*.h
+        test/*.c test/*.h
+    )
+    add_custom_target(format
+        COMMAND ${CLANG_FORMAT_EXECUTABLE} -i ${ALL_SOURCE_FILES}
+        COMMENT "Running clang-format on firmware, startup, test"
+        VERBATIM
+    )
+    add_custom_target(format-check
+        COMMAND ${CLANG_FORMAT_EXECUTABLE} --dry-run --Werror ${ALL_SOURCE_FILES}
+        COMMENT "Checking clang-format compliance"
+        VERBATIM
+    )
+endif()
