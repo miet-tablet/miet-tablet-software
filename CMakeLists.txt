@@ -25,9 +25,9 @@ set(ARCH_FLAGS
     -mthumb
     -mfpu=fpv5-d16
     -mfloat-abi=hard
-    -nostdlib
+    #-nostdlib
     --specs=nano.specs
-    --specs=nosys.specs
+    #--specs=nosys.specs
     -O2
     -D${MCU}xx
     -DCORE_CM7
@@ -65,11 +65,14 @@ set(TARGET main)
 # add_subdirectory(examples/weact_stm32h7b0_blink)
 
 add_link_options(
-    #${ARCH_FLAGS}
-    -mcpu=cortex-m7 -mthumb -mfpu=fpv5-d16 -mfloat-abi=hard -nostdlib -Wl,--gc-sections
+    -mcpu=cortex-m7
+    -mthumb
+    -mfpu=fpv5-d16
+    -mfloat-abi=hard
+    -Wl,--gc-sections
+    -nostartfiles
+    -nostdlib
     "-T${LDSCRIPT_PATH}"
-    #"-Wl,--gc-sections"
-    #"-nostartfiles"
     #"-Wl,-Map=${PROJECT_NAME}.map"
     #-fuse-ld=lld
 )
@@ -81,14 +84,19 @@ add_link_options(
 add_subdirectory(STM32CubeH7)
 add_subdirectory(firmware/interrupt_handler)
 add_subdirectory(firmware/system_init)
+add_subdirectory(firmware/stdio_uart)
 add_subdirectory(test/test_blink)
 add_subdirectory(test/test_gpio_interrupts)
 add_subdirectory(test/test_i2c_wheels)
+add_subdirectory(test/test_separate_uart)
+add_subdirectory(test/test_stdio_mirror)
+add_subdirectory(spi_icm45686_wheels)
 
 # add_executable(main.elf STM32CubeH7/Drivers/CMSIS/Device/ST/STM32H7xx/Source/Templates/gcc/startup_stm32h7b0xx.s)
 add_executable(main.elf startup/stm32h7b0_startup.S)
 
-target_link_libraries(main.elf ${TOP} "-Wl,--whole-archive" firmware_interrupt_handler "-Wl,--no-whole-archive")
+target_link_libraries(main.elf ${TOP} firmware_interrupt_handler)
+target_link_libraries(main.elf c_nano m)
 
 add_custom_command(
     TARGET main.elf
