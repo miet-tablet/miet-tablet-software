@@ -1,6 +1,6 @@
 #include "stdio_uart.h"
 
-static UART_HandleTypeDef uart7_host;
+UART_HandleTypeDef uart7_host;
 
 void HAL_UART_MspInit(UART_HandleTypeDef *uart7_host)
 {
@@ -22,14 +22,14 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uart7_host)
 void stdio_uart_init(void)
 {
     uart7_host.Instance = UART7;
-    uart7_host.Init.BaudRate = 115200;
+    uart7_host.Init.BaudRate = 1000000;
     uart7_host.Init.WordLength = UART_WORDLENGTH_8B;
     uart7_host.Init.StopBits = UART_STOPBITS_1;
     uart7_host.Init.Parity = UART_PARITY_NONE;
     uart7_host.Init.Mode = UART_MODE_TX_RX;
     uart7_host.Init.HwFlowCtl = UART_HWCONTROL_NONE;
     uart7_host.Init.OverSampling = UART_OVERSAMPLING_16;
-    
+
     if (HAL_UART_Init(&uart7_host) != HAL_OK)
     {
         //Error_Handler();

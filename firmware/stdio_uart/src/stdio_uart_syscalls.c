@@ -13,21 +13,24 @@ static uint32_t* heap_ptr = NULL;
 #define STDERR_FILENO       2
 #define STDIN_FILENO        0
 
+extern UART_HandleTypeDef uart7_host;
+
 __attribute__((used)) int _write(int file, char *ptr, int len)
 {
     if (file == STDOUT_FILENO || file == STDERR_FILENO)
     {
-        for (int i = 0; i < len; i++)
-        {
-            stdio_uart_putc(ptr[i]);
-        }
+        //for (int i = 0; i < len; i++)
+        //{
+        //    stdio_uart_putc(ptr[i]);
+        //}
+        HAL_UART_Transmit(&uart7_host, (uint8_t*)ptr, len, HAL_MAX_DELAY);
         return len;
     }
     errno = EBADF;
     return -1;
 }
 
-int _read(int file, char *ptr, int len)
+__attribute__((used)) int _read(int file, char *ptr, int len)
 {
     if (file == STDIN_FILENO)
     {
@@ -52,14 +55,14 @@ void* _sbrk(int incr)
         heap_ptr = (uint32_t*)&_end;
     }
     uint32_t* prev_heap_ptr = heap_ptr;
-    
+
     // Проверка, не залезли ли мы в стек
     if ((uint32_t)(heap_ptr + incr) > (uint32_t)&_estack)
     {
         errno = ENOMEM;
         return (void*)-1; // Память закончилась
     }
-    
+
     heap_ptr += incr;
     return (void*)prev_heap_ptr;
 }
