@@ -42,7 +42,8 @@
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-
+#define BUTTON1_IRQ_HANDLER()  EXTI1_IRQ_HANDLER()
+#define BUTTON2_IRQ_HANDLER()  EXTI2_IRQ_HANDLER()
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
@@ -57,7 +58,8 @@ void PendSV_Handler(void);
 void SysTick_Handler(void);
 /* USER CODE BEGIN EFP */
 
-void EXTI1_IRQ_HANDLER(void);
+void BUTTON1_IRQ_HANDLER();
+void BUTTON2_IRQ_HANDLER();
 
 /* USER CODE END EFP */
 

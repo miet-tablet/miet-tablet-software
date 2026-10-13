@@ -1,6 +1,6 @@
 #
 
-project(test_gpio_interrupts)
+project(test_multiple_interrupts)
 
 set(SOURCES
     src/main.c

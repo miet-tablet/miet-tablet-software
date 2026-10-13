@@ -210,9 +210,14 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /* USER CODE BEGIN 1 */
-void EXTI1_IRQ_HANDLER(void)
+void BUTTON1_IRQ_HANDLER()
 {
-    HAL_GPIO_EXTI_IRQHandler(BUTTON_USER_PIN);
+    HAL_GPIO_EXTI_IRQHandler(BUTTON_1);
+}
+
+void BUTTON2_IRQ_HANDLER()
+{
+    HAL_GPIO_EXTI_IRQHandler(BUTTON_2);
 }
 
 /* USER CODE END 1 */
