@@ -1,4 +1,4 @@
-#include "spi_icm45686_wheels.h"
+#include "spi_wheels.h"
 
 #define SPI_WHEELS_CS_PORT  GPIOD
 #define SPI_WHEELS_CS_PIN   GPIO_PIN_6
@@ -6,7 +6,7 @@
 
 static SPI_HandleTypeDef spi_host;
 
-int spi_icm45686_init(void)
+int init(void)
 {
     GPIO_InitTypeDef gpio = {0};
 
@@ -47,7 +47,7 @@ int spi_icm45686_init(void)
     return HAL_SPI_Init(&spi_host) == HAL_OK ? 0 : -1;
 }
 
-int icm45686_read_register(uint8_t address, uint8_t *value, int len)
+int read_register(uint8_t address, uint8_t *value, int len)
 {
     uint8_t cmd = address | 0x80;
     HAL_StatusTypeDef status;
@@ -65,7 +65,7 @@ int icm45686_read_register(uint8_t address, uint8_t *value, int len)
     return status == HAL_OK ? 0 : -1;
 }
 
-int icm45686_write_register(uint8_t address, const uint8_t *value, int len)
+int write_register(uint8_t address, const uint8_t *value, int len)
 {
     uint8_t cmd = address & 0x7F;
     HAL_StatusTypeDef status;
