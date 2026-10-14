@@ -1,4 +1,4 @@
-project(adc_wheels)
+project(firmware_adc_wheels)
 
 set(SOURCES
     src/adc_wheels.c
