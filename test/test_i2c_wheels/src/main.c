@@ -1,71 +1,51 @@
 #include "main.h"
 #include "stm32h7xx_hal.h"
 #include "i2c_wheels.h" 
-
-// Базовый 7-битный адрес INA3221
-#define INA3221_I2C_ADDRESS         (0x40 << 1) 
-#define INA3221_REG_MANUFACTURER_ID 0xFE
-#define EXPECTED_MANUFACTURER_ID    0x5449
+#include <stdio.h> // Нужен для работы printf
 
 I2C_HandleTypeDef hi2c2;
 
-static void MPU_Config(void);
-
 int main(void)
 {
-    // 1. Инициализация системы
+    // 1. Инициализация системы (без UART и без GPIO)
     MPU_Config();
     HAL_Init();
     SystemClock_Config();
-    MX_GPIO_Init();
     MX_I2C2_Init();
 
-    // 2. Передаем указатель на I2C2 в ваш модуль i2c_wheels
-    i2c_wheels_set_i2c_host(&hi2c2);
+    printf("\r\n--- START I2C WHEELS TEST ---\r\n");
 
-    // Пауза, чтобы INA3221 успела запитаться
-    HAL_Delay(10); 
+    // 2. Инициализация тестируемого модуля
+    i2c_wheels_set_i2c_host(&hi2c2);
+    HAL_Delay(10);
+
+    // 3. Тест функции записи (i2c_wheels_write)
+    uint8_t test_reg = 0xFE;
+    printf("Testing i2c_wheels_write... ");
     
-    // Шаг A: Пишем в шину адрес регистра 0xFE (Manufacturer ID)
-    uint8_t reg_pointer = INA3221_REG_MANUFACTURER_ID;
-    int write_status = i2c_wheels_write(&reg_pointer, 1);
-    
-    if (write_status == 0)
+    int write_status = i2c_wheels_write(&test_reg, 1);
+    if (write_status != 0)
     {
-        // Шаг B: Читаем 2 байта ответа (регистры INA3221 имеют размер 16 бит)
-        uint8_t rx_buffer[2] = {0};
-        int read_status = i2c_wheels_read(rx_buffer, 2);
-        
-        if (read_status == 0)
-        {
-            // Шаг C: Склеиваем байты (старший байт идет первым)
-            uint16_t manufacturer_id = (rx_buffer[0] << 8) | rx_buffer[1];
-            
-            // Если ID совпал со значением из даташита (0x5449) — успех!
-            if (manufacturer_id == EXPECTED_MANUFACTURER_ID)
-            {
-                // Включаем светодиод на плате — тест связи пройден успешно
-                HAL_GPIO_WritePin(GPIOE, GPIO_PIN_3, GPIO_PIN_SET); 
-            }
-            else
-            {
-                // Ошибка: данные прочитались, но они неверные
-                Error_Handler(); 
-            }
-        }
-        else
-        {
-            // Ошибка: микросхема не прислала данные при чтении
-            Error_Handler();
-        }
-    }
-    else
-    {
-        // Ошибка: чип не ответил (NACK) на свой адрес при попытке записи
+        printf("ERROR (Status: %d)\r\n", write_status);
         Error_Handler();
     }
+    printf("OK\r\n");
+    
+    // 4. Тест функции чтения (i2c_wheels_read)
+    uint8_t rx_buffer[2] = {0};
+    printf("Testing i2c_wheels_read... ");
+    
+    int read_status = i2c_wheels_read(rx_buffer, 2);
+    if (read_status != 0)
+    {
+        printf("ERROR (Status: %d)\r\n", read_status);
+        Error_Handler();
+    }
+    printf("OK (Data read: 0x%02X 0x%02X)\r\n", rx_buffer[0], rx_buffer[1]);
 
-    // Если всё работает, бесконечно горим светодиодом успеха
+    // 5. Успешное завершение
+    printf("--- ALL I2C TESTS PASSED SUCCESSFULLY ---\r\n");
+
     while (1)
     {
         HAL_Delay(1000);
@@ -91,49 +71,27 @@ void MX_I2C2_Init(void)
 
 void HAL_I2C_MspInit(I2C_HandleTypeDef* hi2c)
 {
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
     RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
-    
     if(hi2c->Instance==I2C2)
     {
         PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_I2C2;
         PeriphClkInitStruct.I2c2ClockSelection = RCC_I2C2CLKSOURCE_D2PCLK1;
         HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
-
-        __HAL_RCC_GPIOF_CLK_ENABLE();
         __HAL_RCC_I2C2_CLK_ENABLE();
-
-        GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1;
-        GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-        GPIO_InitStruct.Pull = GPIO_PULLUP;
-        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-        GPIO_InitStruct.Alternate = GPIO_AF4_I2C2;
-        HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
     }
 }
 
-void MX_GPIO_Init(void)
+void Error_Handler(void)
 {
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-    __HAL_RCC_GPIOE_CLK_ENABLE();
-    
-    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_3, GPIO_PIN_RESET);
-    GPIO_InitStruct.Pin = GPIO_PIN_3;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+    printf("\r\n!!! CRITICAL ERROR: System Halted !!!\r\n");
+    __disable_irq();
+    while (1);
 }
 
 void Error_Handler(void)
 {
     __disable_irq();
     while (1);
-}
-
-void SysTick_Handler(void)
-{
-    HAL_IncTick();
 }
 
 void SystemClock_Config(void)

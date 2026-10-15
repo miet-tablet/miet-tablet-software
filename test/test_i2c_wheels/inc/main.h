@@ -14,9 +14,9 @@ extern "C" {
 int main(void);
 void SystemClock_Config(void);
 void Error_Handler(void);
+static void MPU_Config(void);
 
 /* Прототипы функций инициализации периферии */
-void MX_GPIO_Init(void);
 void MX_I2C2_Init(void);
 
 #ifdef __cplusplus
