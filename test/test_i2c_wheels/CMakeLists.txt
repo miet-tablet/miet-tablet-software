@@ -17,4 +17,5 @@ target_link_libraries(${PROJECT_NAME}
         CMSIS_Core
         STM32H7xx
         STM32H7xx_HAL_Driver
+        firmware_i2c_wheels
 )

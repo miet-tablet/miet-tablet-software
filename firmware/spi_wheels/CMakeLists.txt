@@ -1,7 +1,7 @@
-project(spi_icm45686_wheels)
+project(spi_wheels)
 
 set(SOURCES
-    src/spi_icm45686_wheels.c
+    src/spi_wheels.c
 )
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})

@@ -97,7 +97,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* hi2c)
     if(hi2c->Instance==I2C2)
     {
         PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_I2C2;
-        PeriphClkInitStruct.I2c2ClockSelection = RCC_I2C2CLKSOURCE_D2PCLK1;
+        PeriphClkInitStruct.I2c123ClockSelection = RCC_I2C123CLKSOURCE_D2PCLK1;
         HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
 
         __HAL_RCC_GPIOF_CLK_ENABLE();
@@ -129,11 +129,6 @@ void Error_Handler(void)
 {
     __disable_irq();
     while (1);
-}
-
-void SysTick_Handler(void)
-{
-    HAL_IncTick();
 }
 
 void SystemClock_Config(void)

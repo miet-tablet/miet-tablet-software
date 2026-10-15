@@ -5,7 +5,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "stm32h7xx_hal_i2c.h"
+#include "stm32h7xx_hal.h"
 
 void i2c_wheels_set_i2c_host(I2C_HandleTypeDef *host);
 

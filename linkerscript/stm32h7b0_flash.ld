@@ -47,7 +47,8 @@ MEMORY
   FLASH (rx)     : ORIGIN = 0x08000000, LENGTH = 128K
   DTCMRAM1 (xrw) : ORIGIN = 0x20000000, LENGTH = 64K
   DTCMRAM2 (xrw) : ORIGIN = 0x20010000, LENGTH = 64K
-  RAM (xrw)      : ORIGIN = 0x24000000, LENGTH = 1024K
+  /* H7B0 has 1024K of AXI SRAM, but 512K keeps the image runnable on H750 too */
+  RAM (xrw)      : ORIGIN = 0x24000000, LENGTH = 512K
   RAM_CD (xrw)   : ORIGIN = 0x30000000, LENGTH = 128K
   RAM_SRD (xrw)  : ORIGIN = 0x38000000, LENGTH = 32K
 }
