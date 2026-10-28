@@ -1,3 +1,6 @@
 [submodule "STM32CubeH7"]
 	path = STM32CubeH7
 	url = git@github.com:Barsy-Barsevich/STM32CubeH7.git
+[submodule "components/INA3221_Barsotion"]
+	path = components/INA3221_Barsotion
+	url = https://github.com/Barsotion/INA3221_Barsotion.git

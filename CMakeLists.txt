@@ -93,6 +93,8 @@ add_subdirectory(test/test_stdio_mirror)
 add_subdirectory(spi_icm45686_wheels)
 add_subdirectory(firmware/adc_wheels)
 add_subdirectory(test/test_adc_wheels)
+add_subdirectory(components/INA3221_Barsotion)
+add_subdirectory(test/test_ina3221)
 
 # add_executable(main.elf STM32CubeH7/Drivers/CMSIS/Device/ST/STM32H7xx/Source/Templates/gcc/startup_stm32h7b0xx.s)
 add_executable(main.elf startup/stm32h7b0_startup.S)
