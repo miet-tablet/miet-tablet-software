@@ -6,7 +6,7 @@
 
 static SPI_HandleTypeDef spi_host;
 
-int init(void)
+int spi_wheels_init(void)
 {
     GPIO_InitTypeDef gpio = {0};
 
@@ -47,7 +47,7 @@ int init(void)
     return HAL_SPI_Init(&spi_host) == HAL_OK ? 0 : -1;
 }
 
-int read_register(uint8_t address, uint8_t *value, int len)
+int spi_wheels_read_register(uint8_t address, uint8_t *value, int len)
 {
     uint8_t cmd = address | 0x80;
     HAL_StatusTypeDef status;
@@ -65,7 +65,7 @@ int read_register(uint8_t address, uint8_t *value, int len)
     return status == HAL_OK ? 0 : -1;
 }
 
-int write_register(uint8_t address, const uint8_t *value, int len)
+int spi_wheels_write_register(uint8_t address, const uint8_t *value, int len)
 {
     uint8_t cmd = address & 0x7F;
     HAL_StatusTypeDef status;
@@ -82,3 +82,15 @@ int write_register(uint8_t address, const uint8_t *value, int len)
 
     return status == HAL_OK ? 0 : -1;
 }
+
+int spi_wheels_transfer(const uint8_t *tx, uint8_t *rx, int len)
+{
+    HAL_StatusTypeDef status;
+    HAL_GPIO_WritePin(SPI_WHEELS_CS_PORT, SPI_WHEELS_CS_PIN, GPIO_PIN_RESET);
+
+    status = HAL_SPI_TransmitReceive(&spi_host, tx, rx, len, SPI_WHEELS_TIMEOUT);
+
+    HAL_GPIO_WritePin(SPI_WHEELS_CS_PORT, SPI_WHEELS_CS_PIN, GPIO_PIN_SET);
+
+    return status == HAL_OK ? 0 : -1;
+}  
