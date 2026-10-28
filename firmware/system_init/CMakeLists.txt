@@ -7,7 +7,7 @@ set(SOURCES
     src/error_handler.c
     src/mpu_config.c
     src/stm32h7xx_hal_msp.c
-    src/system_stm32h7b0xx.c
+    src/system_stm32h7xx.c
 )
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})

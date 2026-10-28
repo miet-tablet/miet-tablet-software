@@ -8,11 +8,12 @@ set(CMAKE_OBJDUMP arm-none-eabi-objdump)
 set(CMAKE_SIZE arm-none-eabi-size)
 set(FIRMWARE_LOCATION FLASH)
 # set(FIRMWARE_LOCATION RAM)
-set(MCU STM32H7B0)
+# set(MCU STM32H7B0)
 # set(MCU STM32H745)
+set(MCU STM32H743)
 # set(LDSCRIPT_NAME ${MCU}_${FIRMWARE_LOCATION}.ld)
 # set(LDSCRIPT_PATH Core/linkerscript/${LDSCRIPT_NAME})
-set(LDSCRIPT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/linkerscript/stm32h7b0_flash.ld)
+set(LDSCRIPT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/linkerscript/stm32h743_flash_dtcmram.ld)
 set(STARTUP_NAME ${MCU}_startup.S)
 set(STARTUP_PATH Core/startup/${STARTUP_NAME})
 
@@ -81,13 +82,16 @@ add_link_options(
 add_subdirectory(STM32CubeH7)
 add_subdirectory(firmware/interrupt_handler)
 add_subdirectory(firmware/system_init)
-add_subdirectory(test/test_blink)
-add_subdirectory(test/test_multiple_interrupts)
+# add_subdirectory(test/test_blink)
+# add_subdirectory(test/test_multiple_interrupts)
+add_subdirectory(test/test_blink_h743)
 
 # add_executable(main.elf STM32CubeH7/Drivers/CMSIS/Device/ST/STM32H7xx/Source/Templates/gcc/startup_stm32h7b0xx.s)
-add_executable(main.elf startup/stm32h7b0_startup.S)
+add_executable(main.elf startup/stm32h743_startup.S)
+
 
 target_link_libraries(main.elf ${TOP} "-Wl,--whole-archive" firmware_interrupt_handler "-Wl,--no-whole-archive")
+target_link_libraries(main.elf ${TOP} "-Wl,--whole-archive" firmware_system_init "-Wl,--no-whole-archive")
 
 add_custom_command(
     TARGET main.elf
