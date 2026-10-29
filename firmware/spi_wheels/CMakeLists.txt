@@ -1,4 +1,4 @@
-project(spi_wheels)
+project(firmware_spi_wheels)
 
 set(SOURCES
     src/spi_wheels.c
