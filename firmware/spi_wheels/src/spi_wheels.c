@@ -40,7 +40,7 @@ int spi_wheels_init(void)
     spi_host.Init.CLKPolarity = SPI_POLARITY_LOW;
     spi_host.Init.CLKPhase = SPI_PHASE_1EDGE;
     spi_host.Init.NSS = SPI_NSS_SOFT;
-    spi_host.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
+    spi_host.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
     spi_host.Init.FirstBit = SPI_FIRSTBIT_MSB;
     spi_host.Init.MasterKeepIOState = SPI_MASTER_KEEP_IO_STATE_ENABLE;
 
