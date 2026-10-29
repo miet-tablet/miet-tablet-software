@@ -26,15 +26,15 @@ int main(void)
     // Пауза, чтобы INA3221 успела запитаться
     HAL_Delay(10); 
     
-    // Шаг A: Пишем в шину адрес регистра 0xFE (Manufacturer ID)
+    // Шаг A: Пишем в шину адрес регистра 0xFE (Manufacturr ID)
     uint8_t reg_pointer = INA3221_REG_MANUFACTURER_ID;
-    int write_status = i2c_wheels_write(&reg_pointer, 1);
+    int write_status = i2c_wheels_write(reg_pointer, (uint8_t*)1, 1);
     
     if (write_status == 0)
     {
         // Шаг B: Читаем 2 байта ответа (регистры INA3221 имеют размер 16 бит)
         uint8_t rx_buffer[2] = {0};
-        int read_status = i2c_wheels_read(rx_buffer, 2);
+        int read_status = i2c_wheels_read(0, (uint8_t*)2, 2);
         
         if (read_status == 0)
         {
