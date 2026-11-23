@@ -54,19 +54,13 @@ frame make_frame_tx(dest_addr dst)
     {
         data.buttons2 |= (hw504_btn[i] << i);
     }
-    uint16t x1 = 0, y1 = 0, x2 = 0, y2 = 0;
-    adc_get_value_4ch(hadc1, &x1, &y1, &x2, &y2, 10); // channel priority decreases
+    uint16t adc1x1 = 0, adc1y1 = 0, adc2x1 = 0, adc2y1 = 0;
+    adc_get_value_4ch(hadc1, &adc1x1, &adc1y1, &adc2x1, &adc2y1, 10); // channel priority decreases
     data.adc1x1 = 0;
-    data.adc1x1 |= x1;
-    data.adc1y1_adc1_x2 = (y1 << 4) | (x1 >> 8);
+    data.adc1x1 |= adc1x1;
+    data.adc1y1_adc1x2 = (adc1y1 << 8) | (adc1x1 >> 8); // ????
     data.adc1y2 = 0;
-    data.adc1y2 |= x1;
-    
-
-
-
-
-
+    data.adc1y2 |= adc1y1;
 }
 
 void bluetooth_transmit_frame(frame data)
