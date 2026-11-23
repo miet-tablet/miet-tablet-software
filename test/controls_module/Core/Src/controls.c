@@ -1,8 +1,13 @@
 #include "controls.h"
 
-GPIO_TypeDef *GPIO_Port[] =
+GPIO_TypeDef *GPIO_Ports_1[] =
 { GPIOA, GPIOA, GPIOA, GPIOA, GPIOA };
-uint16_t GPIO_Pin[] =
+uint16_t GPIO_Pins_1[] =
+{ GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5 };
+
+GPIO_TypeDef *GPIO_Ports_2[] =
+{ GPIOA, GPIOA, GPIOA, GPIOA, GPIOA };
+uint16_t GPIO_Pins_2[] =
 { GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5 };
 
 void adc_get_value_2ch(ADC_HandleTypeDef *hadc, uint16_t *ch1, uint16_t *ch2,
