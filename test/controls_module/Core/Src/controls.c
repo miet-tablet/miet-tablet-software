@@ -10,6 +10,11 @@ GPIO_TypeDef *GPIO_Ports_2[] =
 uint16_t GPIO_Pins_2[] =
 { GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5 };
 
+GPIO_TypeDef *GPIO_Ports_3[] =
+{ GPIOA, GPIOA };
+uint16_t GPIO_Pins_3[] =
+{ GPIO_PIN_2, GPIO_PIN_3 };
+
 void adc_get_value_2ch(ADC_HandleTypeDef *hadc, uint16_t *ch1, uint16_t *ch2,
 		uint32_t timeout)
 {
